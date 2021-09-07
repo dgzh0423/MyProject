@@ -3,7 +3,6 @@ package JavaJDBC.DAO_.utils;
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 import javax.sql.DataSource;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,8 +18,6 @@ public class JDBCUtilsByDruid {
         try {
             properties.load(new FileInputStream("src\\druid.properties"));
             ds = DruidDataSourceFactory.createDataSource(properties);
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
