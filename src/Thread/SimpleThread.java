@@ -1,5 +1,9 @@
 package Thread;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+
 public class SimpleThread {
     public static void main(String[] args) {
         Thread t1 = new MyThread();
@@ -7,6 +11,21 @@ public class SimpleThread {
 
         ThreadProxy threadProxy = new ThreadProxy(new MyRunnable());
         threadProxy.start();
+
+        //Callable接口是一个带泛型的接口，泛型的类型就是线程返回值的类型。
+        //实现Callable接口中的call()方法，方法的返回类型与泛型的类型相同。
+        Callable callable = new MyCallable();
+        //Callable不能直接获取返回值，需要用FutureTask<T>在外部封装一下再获取返回值
+        FutureTask futureTask = new FutureTask<>(callable);
+        Thread t2 = new Thread(futureTask);
+        t2.start();
+        try {
+            futureTask.get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         //lambda语法创建线程
         Thread t3 = new Thread(()-> System.out.println("start Thread3"));
@@ -40,6 +59,24 @@ class MyThread extends Thread {
     }
 }
 
+//实现Runnable接口
+class MyRunnable implements Runnable {
+    @Override
+    public void run() {
+        System.out.println("start Thread2");
+    }
+}
+
+//实现Callable接口
+class MyCallable implements Callable {
+
+    @Override
+    public Object call() throws Exception {
+        System.out.println("start Callable Thread");
+        return 1;
+    }
+}
+
 //线程代理类。模拟一个极简的Thread类
 class ThreadProxy implements Runnable {
     private Runnable target = null;//属性，类型是Runnable
@@ -60,14 +97,8 @@ class ThreadProxy implements Runnable {
         }
     }
 }
-//实现Runnable接口
-class MyRunnable implements Runnable {
-    @Override
-    public void run() {
-        System.out.println("start Thread2");
-    }
-}
 
+//守护线程
 class DaemonThread extends Thread {
     @Override
     public void run() {

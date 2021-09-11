@@ -1,5 +1,7 @@
 package JavaJDBC.DAO_.domain;
 
+
+//JavaBean or POJO
 public class User {
     private Integer id;
     private String name;
