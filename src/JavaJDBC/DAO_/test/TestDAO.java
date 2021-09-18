@@ -22,11 +22,11 @@ public class TestDAO {
         }
 
         //查询单行结果
-        User user = userDAO.querySingle("select* from user where id >= ?", User.class, 1);
+        User user = userDAO.querySingle("select* from user where id = ?", User.class, 1);
         System.out.println(user);
 
         //查询单值
-        Object name = userDAO.queryScalar("select name from user where id >= ?", 12);
+        Object name = userDAO.queryScalar("select name from user where id = ?", 5);
         System.out.println(name);
 
         //insert
